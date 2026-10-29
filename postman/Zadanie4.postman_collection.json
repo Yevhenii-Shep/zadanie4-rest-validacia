@@ -1,0 +1,110 @@
+{
+  "info": {
+    "name": "Zadanie 4 - Adresár zamestnancov",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8081/api/employees" }
+  ],
+  "item": [
+    {
+      "name": "GET",
+      "item": [
+        { "name": "GET všetci (200)", "request": { "method": "GET", "url": "{{baseUrl}}" } },
+        { "name": "GET podľa ID (200)", "request": { "method": "GET", "url": "{{baseUrl}}/2" } },
+        { "name": "GET neexistujúce ID (404)", "request": { "method": "GET", "url": "{{baseUrl}}/99" } },
+        { "name": "GET neplatné ID (400)", "request": { "method": "GET", "url": "{{baseUrl}}/abc" } }
+      ]
+    },
+    {
+      "name": "POST",
+      "item": [
+        {
+          "name": "POST platné dáta (201)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}",
+            "body": { "mode": "raw", "raw": "{\n    \"firstName\": \"Dávid\",\n    \"lastName\": \"Držík\",\n    \"birthDate\": \"1990-05-10\",\n    \"email\": \"ddrzik@ukf.sk\",\n    \"phone\": \"+421901111222\",\n    \"jobTitle\": \"Software Engineer\",\n    \"salary\": 2500,\n    \"fullTime\": true\n}" }
+          }
+        },
+        {
+          "name": "POST neplatné dáta (400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}",
+            "body": { "mode": "raw", "raw": "{\n    \"firstName\": \"D\",\n    \"lastName\": \"\",\n    \"birthDate\": \"2030-01-01\",\n    \"email\": \"ddrzik[at]ukf.sk\",\n    \"phone\": \"0901\",\n    \"jobTitle\": \"\",\n    \"salary\": -5\n}" }
+          }
+        },
+        {
+          "name": "POST existujúci email (409)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}",
+            "body": { "mode": "raw", "raw": "{\n    \"firstName\": \"Ján\",\n    \"lastName\": \"Kopec\",\n    \"birthDate\": \"1991-02-03\",\n    \"email\": \"jozef.novak@ukf.sk\",\n    \"phone\": \"+421901999888\",\n    \"jobTitle\": \"QA Tester\",\n    \"salary\": 1500,\n    \"fullTime\": false\n}" }
+          }
+        },
+        {
+          "name": "POST neplatný JSON (400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}",
+            "body": { "mode": "raw", "raw": "{\n    \"firstName\": \"Dávid\",\n    \"birthDate\": \"10.05.1990\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PUT",
+      "item": [
+        {
+          "name": "PUT platné dáta (200)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/3",
+            "body": { "mode": "raw", "raw": "{\n    \"firstName\": \"Peter\",\n    \"lastName\": \"Horváth\",\n    \"birthDate\": \"1995-07-05\",\n    \"email\": \"peter.horvath@ukf.sk\",\n    \"phone\": \"+421903456789\",\n    \"jobTitle\": \"System Administrator\",\n    \"salary\": 1600,\n    \"fullTime\": false\n}" }
+          }
+        },
+        {
+          "name": "PUT email bez domény ddrzik@ukf (400)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/3",
+            "body": { "mode": "raw", "raw": "{\n    \"firstName\": \"Peter\",\n    \"lastName\": \"Horváth\",\n    \"birthDate\": \"1995-07-05\",\n    \"email\": \"ddrzik@ukf\",\n    \"phone\": \"+421903456789\",\n    \"jobTitle\": \"System Administrator\",\n    \"salary\": 1600,\n    \"fullTime\": false\n}" }
+          }
+        },
+        {
+          "name": "PUT email iného zamestnanca (409)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/3",
+            "body": { "mode": "raw", "raw": "{\n    \"firstName\": \"Peter\",\n    \"lastName\": \"Horváth\",\n    \"birthDate\": \"1995-07-05\",\n    \"email\": \"jozef.novak@ukf.sk\",\n    \"phone\": \"+421903456789\",\n    \"jobTitle\": \"System Administrator\",\n    \"salary\": 1600,\n    \"fullTime\": false\n}" }
+          }
+        },
+        {
+          "name": "PUT neexistujúce ID (404)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/99",
+            "body": { "mode": "raw", "raw": "{\n    \"firstName\": \"Peter\",\n    \"lastName\": \"Horváth\",\n    \"birthDate\": \"1995-07-05\",\n    \"email\": \"peter.horvath@ukf.sk\",\n    \"phone\": \"+421903456789\",\n    \"jobTitle\": \"System Administrator\",\n    \"salary\": 1600,\n    \"fullTime\": false\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "DELETE",
+      "item": [
+        { "name": "DELETE existujúce ID (200) – zadajte ID vytvoreného zamestnanca", "request": { "method": "DELETE", "url": "{{baseUrl}}/11" } },
+        { "name": "DELETE neexistujúce ID (404)", "request": { "method": "DELETE", "url": "{{baseUrl}}/99" } },
+        { "name": "DELETE neplatné ID (400)", "request": { "method": "DELETE", "url": "{{baseUrl}}/abc" } }
+      ]
+    }
+  ]
+}
